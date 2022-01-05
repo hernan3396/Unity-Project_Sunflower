@@ -35,7 +35,8 @@ public class FieldOfView : MonoBehaviour
         Vector2[] uv = new Vector2[vertices.Length];
         int[] triangles = new int[rayCount * 3];
 
-        vertices[0] = origin;
+        // vertices[0] = origin;
+        vertices[0] = Vector3.zero;
 
         int vertexIndex = 1;
         int triangleIndex = 0;
@@ -53,6 +54,8 @@ public class FieldOfView : MonoBehaviour
             {
                 vertex = origin + (GetVectorFromAngle(currentAngle) * viewDistance);
             }
+
+            vertex.z = transform.position.z;
 
             vertices[vertexIndex] = transform.InverseTransformPoint(vertex.x, vertex.y, vertex.z);
 
@@ -73,6 +76,7 @@ public class FieldOfView : MonoBehaviour
         mesh.vertices = vertices;
         mesh.uv = uv;
         mesh.triangles = triangles;
+        mesh.RecalculateNormals();
     }
 
     private Vector3 GetVectorFromAngle(float angle)
