@@ -71,7 +71,7 @@ public class FieldOfView : MonoBehaviour
 
         // assign values
         mesh.vertices = vertices;
-        // mesh.uv = uv;
+        mesh.uv = uv;
         mesh.triangles = triangles;
     }
 

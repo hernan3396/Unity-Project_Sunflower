@@ -11,10 +11,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Objects
+  - Mask
+  - BehindMask
+  - Black
   - 
   - 
   - 
@@ -49,4 +49,7 @@ TagManager:
     locked: 0
   - name: Mesh
     uniqueID: 3901292025
+    locked: 0
+  - name: Black
+    uniqueID: 2330965083
     locked: 0
