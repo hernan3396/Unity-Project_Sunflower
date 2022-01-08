@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_Dissolve
-  m_Shader: {fileID: -6465566751694194690, guid: 02b48c1be3c7c7f48883ef5baa547785, type: 3}
+  m_Name: Fade_Material
+  m_Shader: {fileID: -6465566751694194690, guid: 8786a8997e4d950429f3cd722b44608e, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -36,8 +36,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_305b937efefa4968948305f0ff16bc66: 40
-    - Vector1_8f9d615243b44188b2ed013c4f0ec83d: 0.468
+    - _Alpha: 0.545
     m_Colors:
-    - Color_ef3eb06aa00d4918a37feccd95aa9dfb: {r: 2.9960785, g: 0.09411765, b: 0.09411765, a: 0}
+    - Vector2_84f20623bec24daab5af0c62215b46fc: {r: 1, g: 1, b: 0, a: 0}
+    - Vector2_d518deadca5641a0b85a0b0f684aef5c: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
