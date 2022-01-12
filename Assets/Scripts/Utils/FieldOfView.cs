@@ -84,9 +84,4 @@ public class FieldOfView : MonoBehaviour
         float angleRad = angle * Mathf.PI / 180; // cos and sin needs radians instead of degrees
         return new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad)); ;
     }
-
-    public void SetOrigin(Vector3 newOrigin)
-    {
-        origin = newOrigin;
-    }
 }
