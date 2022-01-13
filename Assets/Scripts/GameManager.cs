@@ -3,12 +3,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     #region Components
-    [SerializeField] Camera cam;
+    private EnemiesManager enemiesManager;
     #endregion
     private static GameManager instance;
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+
         if (instance != null && instance != this)
         {
             Destroy(this.gameObject);
@@ -17,12 +19,9 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Application.targetFrameRate = 60;
+        // components down here
+        enemiesManager = GetComponent<EnemiesManager>();
     }
 
     private void OnDestroy()
@@ -37,6 +36,11 @@ public class GameManager : MonoBehaviour
     public static GameManager GetInstance
     {
         get { return instance; }
+    }
+
+    public EnemiesManager GetEnemiesManager
+    {
+        get { return enemiesManager; }
     }
     #endregion
 }
