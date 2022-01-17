@@ -320,6 +320,7 @@ GameObject:
   - component: {fileID: 83166853}
   - component: {fileID: 83166852}
   - component: {fileID: 83166851}
+  - component: {fileID: 83166854}
   m_Layer: 0
   m_Name: LightsCamera
   m_TagString: Untagged
@@ -452,6 +453,26 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &83166854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 83166849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AssetsPPU: 16
+  m_RefResolutionX: 640
+  m_RefResolutionY: 360
+  m_UpscaleRT: 0
+  m_PixelSnapping: 0
+  m_CropFrameX: 0
+  m_CropFrameY: 0
+  m_StretchFill: 0
 --- !u!1 &145871391
 GameObject:
   m_ObjectHideFlags: 0
@@ -6764,6 +6785,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1494300520}
   - component: {fileID: 1494300521}
+  - component: {fileID: 1494300522}
   m_Layer: 0
   m_Name: CM vcam1
   m_TagString: Untagged
@@ -6821,6 +6843,18 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1443702330}
+--- !u!114 &1494300522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1494300519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1573033731
 GameObject:
   m_ObjectHideFlags: 0
