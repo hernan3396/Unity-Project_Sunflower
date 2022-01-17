@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     #region Components
     private Player player;
     private Rigidbody2D rb;
+    private Animator animator;
     #endregion
 
     #region Variables
@@ -16,6 +17,10 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Methods
+    private void Awake()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
     private void Start()
     {
         player = GetComponent<Player>();
@@ -25,6 +30,13 @@ public class PlayerMovement : MonoBehaviour
     private void OnMove(InputValue inputValue)
     {
         direction = inputValue.Get<Vector2>();
+        animator.SetFloat("hMovement", direction.x);
+        animator.SetFloat("vMovement", direction.y);
+    }
+
+    private void Update()
+    {
+        animator.SetBool("isMoving", direction != Vector2.zero ? true : false);
     }
 
     private void LateUpdate()
