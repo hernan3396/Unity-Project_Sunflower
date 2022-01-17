@@ -1,29 +1,54 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using TMPro;
 [RequireComponent(typeof(Rigidbody2D))]
 
 public class Player : MonoBehaviour
 {
     #region Components
     private Rigidbody2D rb;
+    private Animator animator;
+    #endregion
+    #region PlayerEnum
+    public enum State
+    {
+        Idle,
+        Walking
+    }
     #endregion
     #region Movement
-    [SerializeField] private float movementSpeed = 5f;
+    [Header("Movement")]
+    [SerializeField] private float movementSpeed = 7f;
+    private Vector2 direction;
+    [Space]
     #endregion
     #region Shadow/Light
     private List<Transform> objectives = new List<Transform>();
     private EnemiesManager enemiesManager;
     private bool nearLight = false;
     #endregion
+    #region State
+    [Header("State")]
+    // TODO: pasar esto a UIManager
+    [SerializeField] private TMP_Text currentStateText;
+    private State currentState;
+    #endregion
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
     {
         enemiesManager = GameManager.GetInstance.GetEnemiesManager;
+    }
+
+    private void OnMove(InputValue inputValue)
+    {
+        direction = inputValue.Get<Vector2>();
     }
 
     private void Update()
@@ -45,6 +70,7 @@ public class Player : MonoBehaviour
                 }
             }
         }
+        currentStateText.text = "State: " + currentState.ToString();
     }
 
     #region Shadow/Light
@@ -81,9 +107,25 @@ public class Player : MonoBehaviour
         get { return rb; }
     }
 
+    public Animator GetAnimator
+    {
+        get { return animator; }
+    }
+
     public float MovementSpeed
     {
         get { return movementSpeed; }
+    }
+
+    public Vector2 Direction
+    {
+        get { return direction; }
+    }
+
+    public State CurrentState
+    {
+        get { return currentState; }
+        set { currentState = value; }
     }
     #endregion
 }

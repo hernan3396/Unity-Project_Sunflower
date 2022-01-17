@@ -4,6 +4,7 @@ using TMPro;
 public class EnemiesManager : MonoBehaviour
 {
     [SerializeField] private bool playerOnLight = false;
+    //TODO: pasar esto a un UIManager
     [SerializeField] private TMP_Text playerStatus;
 
     public void PlayerEnterLight()
