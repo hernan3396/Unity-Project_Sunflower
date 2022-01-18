@@ -25,7 +25,7 @@ public class PlayerState : MonoBehaviour
     // logic for managing states and animations
     private void ManageState()
     {
-        player.CurrentState = player.Direction != Vector2.zero
+        player.CurrentState = player.CurrentDirection != Vector2.zero
                             ? Player.State.Walking : Player.State.Idle;
     }
 
@@ -35,8 +35,8 @@ public class PlayerState : MonoBehaviour
         {
             case Player.State.Walking:
                 animator.SetBool("isMoving", true);
-                animator.SetFloat("hMovement", player.Direction.x);
-                animator.SetFloat("vMovement", player.Direction.y);
+                animator.SetFloat("hMovement", player.CurrentDirection.x);
+                animator.SetFloat("vMovement", player.CurrentDirection.y);
                 break;
             default:
                 animator.SetBool("isMoving", false);

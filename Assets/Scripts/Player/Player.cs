@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using TMPro;
+using DG.Tweening;
 [RequireComponent(typeof(Rigidbody2D))]
 
 public class Player : MonoBehaviour
@@ -9,6 +10,7 @@ public class Player : MonoBehaviour
     #region Components
     private Rigidbody2D rb;
     private Animator animator;
+    private UIManager uiManager;
     #endregion
     #region PlayerEnum
     public enum State
@@ -19,8 +21,12 @@ public class Player : MonoBehaviour
     #endregion
     #region Movement
     [Header("Movement")]
-    [SerializeField] private float movementSpeed = 7f;
+    [SerializeField, Range(5, 20)] private int movementSpeed = 9;
+    [SerializeField, Range(1, 10)] private int movSmoothness = 2;
+    private Vector2 currentDirection;
+    private int sprintingSpeed;
     private Vector2 direction;
+    private int walkingSpeed;
     [Space]
     #endregion
     #region Shadow/Light
@@ -29,9 +35,6 @@ public class Player : MonoBehaviour
     private bool nearLight = false;
     #endregion
     #region State
-    [Header("State")]
-    // TODO: pasar esto a UIManager
-    [SerializeField] private TMP_Text currentStateText;
     private State currentState;
     #endregion
 
@@ -44,6 +47,10 @@ public class Player : MonoBehaviour
     private void Start()
     {
         enemiesManager = GameManager.GetInstance.GetEnemiesManager;
+        uiManager = GameManager.GetInstance.GetUIManager;
+
+        sprintingSpeed = movementSpeed * 2;
+        walkingSpeed = movementSpeed;
     }
 
     private void OnMove(InputValue inputValue)
@@ -53,6 +60,9 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        // smooth movement
+        DOTween.To(() => currentDirection, x => currentDirection = x, direction, movSmoothness * Time.deltaTime);
+
         if (nearLight)
         {
             foreach (Transform objective in objectives)
@@ -70,8 +80,21 @@ public class Player : MonoBehaviour
                 }
             }
         }
-        currentStateText.text = "State: " + currentState.ToString();
+        uiManager.PlayerState(currentState);
     }
+
+    #region Movement
+    private void OnSprint()
+    {
+        // TODO: pasar a un lerp
+        movementSpeed = sprintingSpeed;
+    }
+
+    private void OnStopSprint()
+    {
+        movementSpeed = walkingSpeed;
+    }
+    #endregion
 
     #region Shadow/Light
     // cant use generic ontrigger script cause
@@ -115,6 +138,11 @@ public class Player : MonoBehaviour
     public float MovementSpeed
     {
         get { return movementSpeed; }
+    }
+
+    public Vector2 CurrentDirection
+    {
+        get { return currentDirection; }
     }
 
     public Vector2 Direction

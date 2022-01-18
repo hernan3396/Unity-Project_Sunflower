@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void LateUpdate()
     {
-        rb.velocity = player.Direction * player.MovementSpeed;
+        rb.velocity = player.CurrentDirection * player.MovementSpeed;
     }
     #endregion
 }
