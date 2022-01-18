@@ -3,19 +3,28 @@ using TMPro;
 
 public class EnemiesManager : MonoBehaviour
 {
+    #region Components
     [SerializeField] private bool playerOnLight = false;
-    //TODO: pasar esto a un UIManager
-    [SerializeField] private TMP_Text playerStatus;
+    private UIManager uiManager;
+    #endregion
 
+    private void Start()
+    {
+        uiManager = GameManager.GetInstance.GetUIManager;
+    }
+
+    #region PlayerVisibility
     public void PlayerEnterLight()
     {
         playerOnLight = true;
-        playerStatus.text = "Status: Visible";
+        uiManager.PlayerStatus("Visible");
     }
 
     public void PlayerExitLight()
     {
         playerOnLight = false;
-        playerStatus.text = "Status: Hidden";
+        uiManager.PlayerStatus("Hidden  ");
     }
+    #endregion
+
 }

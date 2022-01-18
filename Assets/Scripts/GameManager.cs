@@ -4,6 +4,7 @@ public class GameManager : MonoBehaviour
 {
     #region Components
     private EnemiesManager enemiesManager;
+    private UIManager uiManager;
     #endregion
     private static GameManager instance;
 
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
 
         // components down here
         enemiesManager = GetComponent<EnemiesManager>();
+        uiManager = GetComponent<UIManager>();
     }
 
     private void OnDestroy()
@@ -41,6 +43,11 @@ public class GameManager : MonoBehaviour
     public EnemiesManager GetEnemiesManager
     {
         get { return enemiesManager; }
+    }
+
+    public UIManager GetUIManager
+    {
+        get { return uiManager; }
     }
     #endregion
 }
