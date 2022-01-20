@@ -16,7 +16,9 @@ public class Player : MonoBehaviour
     public enum State
     {
         Idle,
-        Walking
+        Walking,
+        Running,
+        Attacking
     }
     #endregion
     #region Movement
@@ -27,6 +29,16 @@ public class Player : MonoBehaviour
     private int sprintingSpeed;
     private Vector2 direction;
     private int walkingSpeed;
+    private bool isRunning;
+    [Space]
+    #endregion
+    #region Attack
+    [Header("Attack")]
+    [SerializeField, Range(0, 10)] private float attackDuraction;
+    [SerializeField] private float attackRange = 0.5f;
+    [SerializeField] private LayerMask attackLayer;
+    [SerializeField] private Transform attackPoint;
+    private bool isAttacking;
     [Space]
     #endregion
     #region Shadow/Light
@@ -51,11 +63,6 @@ public class Player : MonoBehaviour
 
         sprintingSpeed = movementSpeed * 2;
         walkingSpeed = movementSpeed;
-    }
-
-    private void OnMove(InputValue inputValue)
-    {
-        direction = inputValue.Get<Vector2>();
     }
 
     private void Update()
@@ -84,15 +91,58 @@ public class Player : MonoBehaviour
     }
 
     #region Movement
+    private void OnMove(InputValue inputValue)
+    {
+        direction = inputValue.Get<Vector2>();
+    }
+
     private void OnSprint()
     {
         // TODO: pasar a un lerp
         movementSpeed = sprintingSpeed;
+        isRunning = true;
     }
 
     private void OnStopSprint()
     {
         movementSpeed = walkingSpeed;
+        isRunning = false;
+    }
+    #endregion
+
+    #region Attacking
+    private void OnSimpleAttack()
+    {
+        // TODO: Limitar para que no se pueda spamear el ataque
+        // TODO: pasarlo a playerCombat
+        // TODO: los ataques hacerlos un scriptableobjects
+        Debug.Log("Atacando");
+        isAttacking = true;
+
+        // Detect enemies
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackLayer);
+
+        foreach (Collider2D collider2d in hitEnemies)
+        {
+            if (collider2d.CompareTag("Enemy"))
+            {
+                Debug.Log("Le pegaste a " + collider2d.name);
+            }
+        }
+
+        // stops attack
+        Invoke("StopAttack", attackDuraction);
+    }
+
+    private void StopAttack()
+    {
+        Debug.Log("Stoping attack");
+        isAttacking = false;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
     #endregion
 
@@ -148,6 +198,16 @@ public class Player : MonoBehaviour
     public Vector2 Direction
     {
         get { return direction; }
+    }
+
+    public bool IsRunning
+    {
+        get { return isRunning; }
+    }
+
+    public bool IsAttacking
+    {
+        get { return isAttacking; }
     }
 
     public State CurrentState

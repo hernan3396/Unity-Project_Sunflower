@@ -23,6 +23,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (player.CurrentState == Player.State.Attacking)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
         rb.velocity = player.CurrentDirection * player.MovementSpeed;
     }
     #endregion

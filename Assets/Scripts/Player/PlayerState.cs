@@ -5,6 +5,7 @@ public class PlayerState : MonoBehaviour
     #region Components
     private Player player;
     private Animator animator;
+    private Rigidbody2D rb;
     #endregion
 
     #region Methods
@@ -12,6 +13,7 @@ public class PlayerState : MonoBehaviour
     {
         player = GetComponent<Player>();
         animator = player.GetAnimator;
+        rb = player.GetRb;
     }
 
     private void Update()
@@ -25,7 +27,19 @@ public class PlayerState : MonoBehaviour
     // logic for managing states and animations
     private void ManageState()
     {
-        player.CurrentState = player.CurrentDirection != Vector2.zero
+        if (player.IsAttacking)
+        {
+            player.CurrentState = Player.State.Attacking;
+            return;
+        }
+
+        if (player.IsRunning)
+        {
+            player.CurrentState = Player.State.Running;
+            return;
+        }
+
+        player.CurrentState = player.CurrentDirection != Vector2.zero && rb.velocity != Vector2.zero
                             ? Player.State.Walking : Player.State.Idle;
     }
 
@@ -34,6 +48,12 @@ public class PlayerState : MonoBehaviour
         switch (player.CurrentState)
         {
             case Player.State.Walking:
+                animator.SetBool("isMoving", true);
+                animator.SetFloat("hMovement", player.CurrentDirection.x);
+                animator.SetFloat("vMovement", player.CurrentDirection.y);
+                break;
+            case Player.State.Running:
+                // TODO: cambiar esta animacion luego
                 animator.SetBool("isMoving", true);
                 animator.SetFloat("hMovement", player.CurrentDirection.x);
                 animator.SetFloat("vMovement", player.CurrentDirection.y);
