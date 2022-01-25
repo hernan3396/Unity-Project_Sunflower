@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using TMPro;
 using DG.Tweening;
 [RequireComponent(typeof(Rigidbody2D))]
 
@@ -33,13 +32,25 @@ public class Player : MonoBehaviour
     [Space]
     #endregion
     #region Attack
-    [Header("Attack")]
-    [SerializeField, Range(0, 10)] private float attackDuraction;
-    [SerializeField] private float attackRange = 0.5f;
+    #region AttackSettings
+    [Header("Attack Settings")]
     [SerializeField] private LayerMask attackLayer;
     [SerializeField] private Transform attackPoint;
     private bool isAttacking;
     [Space]
+    #endregion
+    #region AttackParameters
+    [Header("Attack Parameters")]
+    [SerializeField, Range(0, 10)] private float attackDuration;
+    [SerializeField] private float attackRadius = 0.5f;
+    [SerializeField] private float attackRange = 1;
+    #endregion
+    #region AttackCombo
+    [SerializeField] private float comboMaxTimer = 1; // chainning attacks max time
+    private int comboLength = 2;
+    private int comboAttack = 0;
+    private float comboTimer;
+    #endregion
     #endregion
     #region Shadow/Light
     private List<Transform> objectives = new List<Transform>();
@@ -88,6 +99,23 @@ public class Player : MonoBehaviour
             }
         }
         uiManager.PlayerState(currentState);
+
+        // just to visualize, remove later
+        attackPoint.position = (Vector2)transform.position + direction * attackRange;
+        attackPoint.localScale = new Vector3(attackRadius, attackRadius, attackRadius) * 2;
+
+        #region Attack
+        if (comboAttack > 0)
+        {
+            comboTimer += Time.deltaTime;
+
+            if (comboTimer > comboMaxTimer)
+            {
+                comboTimer = 0;
+                comboAttack = 0;
+            }
+        }
+        #endregion
     }
 
     #region Movement
@@ -110,39 +138,11 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    #region Attacking
-    private void OnSimpleAttack()
-    {
-        // TODO: Limitar para que no se pueda spamear el ataque
-        // TODO: pasarlo a playerCombat
-        // TODO: los ataques hacerlos un scriptableobjects
-        Debug.Log("Atacando");
-        isAttacking = true;
-
-        // Detect enemies
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackLayer);
-
-        foreach (Collider2D collider2d in hitEnemies)
-        {
-            if (collider2d.CompareTag("Enemy"))
-            {
-                Debug.Log("Le pegaste a " + collider2d.name);
-            }
-        }
-
-        // stops attack
-        Invoke("StopAttack", attackDuraction);
-    }
-
-    private void StopAttack()
-    {
-        Debug.Log("Stoping attack");
-        isAttacking = false;
-    }
-
+    #region Attack
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere((Vector2)transform.position + direction * attackRange,
+                                attackRadius);
     }
     #endregion
 
@@ -185,6 +185,7 @@ public class Player : MonoBehaviour
         get { return animator; }
     }
 
+    #region Movement
     public float MovementSpeed
     {
         get { return movementSpeed; }
@@ -204,11 +205,41 @@ public class Player : MonoBehaviour
     {
         get { return isRunning; }
     }
+    #endregion
+
+    #region Attack
+    public LayerMask AttackLayer
+    {
+        get { return attackLayer; }
+    }
+
+    public float AttackDuration
+    {
+        get { return attackDuration; }
+    }
+
+    public float AttackRadius
+    {
+        get { return attackRadius; }
+    }
+
+    public float AttackRange
+    {
+        get { return attackRange; }
+    }
 
     public bool IsAttacking
     {
         get { return isAttacking; }
+        set { isAttacking = value; }
     }
+
+    public int ComboAttack
+    {
+        get { return comboAttack; }
+        set { comboAttack = value; }
+    }
+    #endregion
 
     public State CurrentState
     {
