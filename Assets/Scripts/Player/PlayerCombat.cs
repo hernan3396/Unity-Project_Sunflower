@@ -1,14 +1,19 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
     #region Components
     private Player player;
+
+    // eliminar esta parte de la ui, solo para testing
+    [SerializeField] public TMP_Text comboNumber;
     #endregion
 
     private void Start()
     {
         player = GetComponent<Player>();
+        comboNumber.text = "Combo: " + player.ComboAttack.ToString();
     }
 
     #region Attacking
@@ -16,8 +21,6 @@ public class PlayerCombat : MonoBehaviour
     {
         // it works as a cooldown, it resets on StopAttack
         if (player.IsAttacking) return;
-
-        Debug.Log("Attack number: " + player.ComboAttack.ToString());
 
         player.IsAttacking = true;
 
@@ -30,7 +33,16 @@ public class PlayerCombat : MonoBehaviour
         {
             if (collider2d.CompareTag("Enemy"))
             {
-                Debug.Log("Le pegaste a " + collider2d.name);
+                // Debug.Log("Le pegaste a " + collider2d.name);
+                // change fixed value
+                if (player.ComboAttack == 2)
+                {
+                    collider2d.GetComponent<Enemy>().TakeDamage(player.AttackDamage * 2);
+                }
+                else
+                {
+                    collider2d.GetComponent<Enemy>().TakeDamage(player.AttackDamage);
+                }
             }
         }
 
@@ -42,6 +54,10 @@ public class PlayerCombat : MonoBehaviour
     {
         player.IsAttacking = false;
         player.ComboAttack += 1;
+        comboNumber.text = "Combo: " + player.ComboAttack.ToString();
+
+        // resets combo timer
+        player.ComboTimer = 0;
     }
     #endregion
 }

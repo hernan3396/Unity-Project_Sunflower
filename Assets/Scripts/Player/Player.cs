@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using TMPro;
 using DG.Tweening;
 [RequireComponent(typeof(Rigidbody2D))]
 
@@ -42,14 +43,16 @@ public class Player : MonoBehaviour
     #region AttackParameters
     [Header("Attack Parameters")]
     [SerializeField, Range(0, 10)] private float attackDuration;
-    [SerializeField] private float attackRadius = 0.5f;
-    [SerializeField] private float attackRange = 1;
+    [SerializeField, Range(0, 2)] private float attackRadius = 0.5f;
+    [SerializeField, Range(0, 2)] private float attackRange = 1;
+    [SerializeField, Range(0, 100)] private int attackDamage = 20;
     #endregion
     #region AttackCombo
     [SerializeField] private float comboMaxTimer = 1; // chainning attacks max time
     private int comboLength = 2;
     private int comboAttack = 0;
     private float comboTimer;
+    [SerializeField] private TMP_Text comboNumber;
     #endregion
     #endregion
     #region Shadow/Light
@@ -98,6 +101,7 @@ public class Player : MonoBehaviour
                 }
             }
         }
+
         uiManager.PlayerState(currentState);
 
         // just to visualize, remove later
@@ -109,10 +113,11 @@ public class Player : MonoBehaviour
         {
             comboTimer += Time.deltaTime;
 
-            if (comboTimer > comboMaxTimer)
+            if (comboTimer > comboMaxTimer || comboAttack > comboLength)
             {
                 comboTimer = 0;
                 comboAttack = 0;
+                comboNumber.text = "Combo: " + comboAttack.ToString();
             }
         }
         #endregion
@@ -238,6 +243,17 @@ public class Player : MonoBehaviour
     {
         get { return comboAttack; }
         set { comboAttack = value; }
+    }
+
+    public float ComboTimer
+    {
+        get { return comboTimer; }
+        set { comboTimer = value; }
+    }
+
+    public int AttackDamage
+    {
+        get { return attackDamage; }
     }
     #endregion
 
