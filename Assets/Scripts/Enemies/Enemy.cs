@@ -3,23 +3,23 @@ using TMPro;
 
 public class Enemy : MonoBehaviour
 {
-    #region UI
-    // move later
-    [SerializeField] private GameObject DamageTxt;
+    #region Components
+    private UIManager uIManager;
     #endregion
 
     #region Parameters
     [SerializeField] private int health;
     #endregion
 
+    private void Start()
+    {
+        uIManager = GameManager.GetInstance.GetUIManager;
+    }
+
     public void TakeDamage(int value)
     {
         // move later to ui and use variables
-        DamageTxt.gameObject.SetActive(true);
-        DamageTxt.GetComponent<RectTransform>().position = transform.position;
-        DamageTxt.GetComponentInChildren<TMP_Text>().text = value.ToString();
-        DamageTxt.GetComponentInChildren<Animator>().Play("FloatingDamage");
-        Invoke("DeactivateText", 0.9f);
+        uIManager.DamageTxt(transform.position, value);
 
         health -= value;
 
@@ -33,10 +33,5 @@ public class Enemy : MonoBehaviour
     {
         GetComponent<SpriteRenderer>().color = Color.black;
         this.gameObject.SetActive(false);
-    }
-
-    private void DeactivateText()
-    {
-        DamageTxt.gameObject.SetActive(false);
     }
 }
