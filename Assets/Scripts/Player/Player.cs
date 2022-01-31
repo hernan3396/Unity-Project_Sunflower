@@ -42,10 +42,11 @@ public class Player : MonoBehaviour
     #endregion
     #region AttackParameters
     [Header("Attack Parameters")]
-    [SerializeField, Range(0, 10)] private float attackDuration;
+    [SerializeField, Range(0, 2)] private float attackStartTime = 0.2f;
     [SerializeField, Range(0, 2)] private float attackRadius = 0.5f;
-    [SerializeField, Range(0, 2)] private float attackRange = 1;
     [SerializeField, Range(0, 100)] private int attackDamage = 20;
+    [SerializeField, Range(0, 10)] private float attackDuration;
+    [SerializeField, Range(0, 2)] private float attackRange = 1;
     #endregion
     #region AttackCombo
     [SerializeField] private float comboMaxTimer = 1; // chainning attacks max time
@@ -102,13 +103,17 @@ public class Player : MonoBehaviour
             }
         }
 
-        uiManager.PlayerState(currentState);
-
-        // just to visualize, remove later
-        attackPoint.position = (Vector2)transform.position + direction * attackRange;
-        attackPoint.localScale = new Vector3(attackRadius, attackRadius, attackRadius) * 2;
-
         #region Attack
+        // region attack point
+        // if you take your hand out of the controller
+        // attack point stays on place instead of going to
+        // local (0,0)
+        if (direction != Vector2.zero)
+        {
+            attackPoint.position = (Vector2)transform.position + direction * attackRange;
+            attackPoint.localScale = new Vector3(attackRadius, attackRadius, attackRadius) * 2;
+        }
+
         if (comboAttack > 0)
         {
             comboTimer += Time.deltaTime;
@@ -117,10 +122,12 @@ public class Player : MonoBehaviour
             {
                 comboTimer = 0;
                 comboAttack = 0;
-                comboNumber.text = "Combo: " + comboAttack.ToString();
+                uiManager.ComboNumber(comboAttack);
             }
         }
         #endregion
+
+        uiManager.PlayerState(currentState);
     }
 
     #region Movement
@@ -146,8 +153,7 @@ public class Player : MonoBehaviour
     #region Attack
     private void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere((Vector2)transform.position + direction * attackRange,
-                                attackRadius);
+        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
     #endregion
 
@@ -254,6 +260,16 @@ public class Player : MonoBehaviour
     public int AttackDamage
     {
         get { return attackDamage; }
+    }
+
+    public Transform AttackPoint
+    {
+        get { return attackPoint; }
+    }
+
+    public float AttackStartTime
+    {
+        get { return attackStartTime; }
     }
     #endregion
 
