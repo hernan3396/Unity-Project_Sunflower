@@ -35,6 +35,11 @@ public class Player : MonoBehaviour
     #region Attack
     [Header("Attack")]
     [SerializeField] private Transform attackPoint;
+    // Estos 2 valores sacarlos de aca si
+    // queres hacerlos individuales por ataque
+    // pero creo que no es necesario
+    [SerializeField, Range(0, 2)] private float meleeOff;
+    [SerializeField] private Vector2 attackOff;
     private bool isAttacking;
     [Space]
     #endregion
@@ -92,7 +97,7 @@ public class Player : MonoBehaviour
         // local (0,0)
         if (direction != Vector2.zero)
         {
-            attackPoint.position = (Vector2)transform.position + direction;
+            attackPoint.position = (Vector2)transform.position + (direction * meleeOff) + attackOff;
         }
         #endregion
 
