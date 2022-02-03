@@ -10,7 +10,7 @@ public class Ability : ScriptableObject
     [SerializeField] protected float activeTime;
     [SerializeField] protected float castTime;
     [SerializeField] protected int damage;
-    [SerializeField] protected int radius;
+    [SerializeField] protected float radius;
     [Space]
     #endregion
 
@@ -26,7 +26,7 @@ public class Ability : ScriptableObject
         combo = 0;
     }
 
-    public virtual void Activate(Vector2 position)
+    public virtual void Activate(Transform position)
     {
         // activar la habilidad
     }
@@ -78,7 +78,7 @@ public class Ability : ScriptableObject
         get { return damage; }
     }
 
-    public int Radius
+    public float Radius
     {
         get { return radius; }
     }

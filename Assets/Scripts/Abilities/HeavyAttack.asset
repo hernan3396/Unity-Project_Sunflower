@@ -20,6 +20,6 @@ MonoBehaviour:
   activeTime: 0
   castTime: 0.2
   damage: 40
-  radius: 2
+  radius: 1
   isCombo: 0
   comboLength: 0

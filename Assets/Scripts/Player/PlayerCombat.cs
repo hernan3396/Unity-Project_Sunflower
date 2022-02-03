@@ -51,7 +51,7 @@ public class PlayerCombat : MonoBehaviour
 
         yield return new WaitForSeconds(abilities[currentAbility].CastTime);
 
-        abilities[currentAbility].Activate(player.AttackPoint.position);
+        abilities[currentAbility].Activate(player.AttackPoint);
 
         if (abilities[currentAbility].IsCombo)
         {
@@ -70,5 +70,4 @@ public class PlayerCombat : MonoBehaviour
     #endregion
 
     // TODO: Implementar Sistema de cooldown para las habilidades
-
 }
