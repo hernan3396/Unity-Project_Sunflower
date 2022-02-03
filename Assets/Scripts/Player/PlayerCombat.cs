@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using System.Collections;
 
@@ -9,49 +8,54 @@ public class PlayerCombat : MonoBehaviour
     private Player player;
     #endregion
 
+    #region Abilities
+    enum AbilityName
+    {
+        SimpleAttack,
+        HeavyAttack
+    }
+
+    [SerializeField] private Ability[] abilities;
+    private int currentAbility;
+    #endregion
+
     private void Start()
     {
         player = GetComponent<Player>();
         uIManager = GameManager.GetInstance.GetUIManager;
-
-        uIManager.ComboNumber(player.ComboAttack);
     }
 
-    #region Attacking
     private void OnSimpleAttack()
     {
         // it works as a cooldown, it resets on StopAttack
         if (player.IsAttacking) return;
 
+        if (abilities[currentAbility].Finisher())
+        {
+            abilities[currentAbility].ResetCombo();
+            currentAbility = (int)AbilityName.HeavyAttack;
+        }
+        else
+        {
+            currentAbility = (int)AbilityName.SimpleAttack;
+        }
+
         StartCoroutine("StartAttack");
     }
 
+    #region AttackLogic
+    // attack is selected on previous step (for example OnSimpleAttack())
     private IEnumerator StartAttack()
     {
         player.IsAttacking = true;
 
-        yield return new WaitForSeconds(player.AttackStartTime);
+        yield return new WaitForSeconds(abilities[currentAbility].CastTime);
 
-        // Detect enemies
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(
-                                player.AttackPoint.position,
-                                player.AttackRadius, player.AttackLayer);
+        abilities[currentAbility].Activate(player.AttackPoint.position);
 
-        foreach (Collider2D collider2d in hitEnemies)
+        if (abilities[currentAbility].IsCombo)
         {
-            if (collider2d.CompareTag("Enemy"))
-            {
-                // Debug.Log("Le pegaste a " + collider2d.name);
-                // change fixed value
-                if (player.ComboAttack == 2)
-                {
-                    collider2d.GetComponent<Enemy>().TakeDamage(player.AttackDamage * 2);
-                }
-                else
-                {
-                    collider2d.GetComponent<Enemy>().TakeDamage(player.AttackDamage);
-                }
-            }
+            abilities[currentAbility].AddCombo();
         }
 
         StartCoroutine("StopAttack");
@@ -59,14 +63,12 @@ public class PlayerCombat : MonoBehaviour
 
     private IEnumerator StopAttack()
     {
-        yield return new WaitForSeconds(player.AttackDuration);
+        yield return new WaitForSeconds(abilities[currentAbility].CooldownTime);
 
         player.IsAttacking = false;
-        player.ComboAttack += 1;
-        uIManager.ComboNumber(player.ComboAttack);
-
-        // resets combo timer
-        player.ComboTimer = 0;
     }
     #endregion
+
+    // TODO: Implementar Sistema de cooldown para las habilidades
+
 }
