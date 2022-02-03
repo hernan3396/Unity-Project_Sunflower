@@ -53,13 +53,18 @@ public class PlayerState : MonoBehaviour
                 animator.SetFloat("vMovement", player.CurrentDirection.y);
                 break;
             case Player.State.Running:
-                // TODO: cambiar esta animacion luego
                 animator.SetBool("isMoving", true);
                 animator.SetFloat("hMovement", player.CurrentDirection.x);
                 animator.SetFloat("vMovement", player.CurrentDirection.y);
                 break;
+            case Player.State.Attacking:
+                animator.SetBool("isAttacking", true);
+                animator.SetFloat("hAtkDir", player.AttackPoint.localPosition.x);
+                animator.SetFloat("vAtkDir", player.AttackPoint.localPosition.y);
+                break;
             default:
                 animator.SetBool("isMoving", false);
+                animator.SetBool("isAttacking", false);
                 break;
         }
     }
