@@ -33,28 +33,10 @@ public class Player : MonoBehaviour
     [Space]
     #endregion
     #region Attack
-    #region AttackSettings
-    [Header("Attack Settings")]
-    [SerializeField] private LayerMask attackLayer;
+    [Header("Attack")]
     [SerializeField] private Transform attackPoint;
     private bool isAttacking;
     [Space]
-    #endregion
-    #region AttackParameters
-    [Header("Attack Parameters")]
-    [SerializeField, Range(0, 2)] private float attackStartTime = 0.2f;
-    [SerializeField, Range(0, 2)] private float attackRadius = 0.5f;
-    [SerializeField, Range(0, 100)] private int attackDamage = 20;
-    [SerializeField, Range(0, 10)] private float attackDuration;
-    [SerializeField, Range(0, 2)] private float attackRange = 1;
-    #endregion
-    #region AttackCombo
-    [SerializeField] private float comboMaxTimer = 1; // chainning attacks max time
-    private int comboLength = 2;
-    private int comboAttack = 0;
-    private float comboTimer;
-    [SerializeField] private TMP_Text comboNumber;
-    #endregion
     #endregion
     #region Shadow/Light
     private List<Transform> objectives = new List<Transform>();
@@ -110,20 +92,7 @@ public class Player : MonoBehaviour
         // local (0,0)
         if (direction != Vector2.zero)
         {
-            attackPoint.position = (Vector2)transform.position + direction * attackRange;
-            attackPoint.localScale = new Vector3(attackRadius, attackRadius, attackRadius) * 2;
-        }
-
-        if (comboAttack > 0)
-        {
-            comboTimer += Time.deltaTime;
-
-            if (comboTimer > comboMaxTimer || comboAttack > comboLength)
-            {
-                comboTimer = 0;
-                comboAttack = 0;
-                uiManager.ComboNumber(comboAttack);
-            }
+            attackPoint.position = (Vector2)transform.position + direction;
         }
         #endregion
 
@@ -147,13 +116,6 @@ public class Player : MonoBehaviour
     {
         movementSpeed = walkingSpeed;
         isRunning = false;
-    }
-    #endregion
-
-    #region Attack
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
     #endregion
 
@@ -219,57 +181,15 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Attack
-    public LayerMask AttackLayer
-    {
-        get { return attackLayer; }
-    }
-
-    public float AttackDuration
-    {
-        get { return attackDuration; }
-    }
-
-    public float AttackRadius
-    {
-        get { return attackRadius; }
-    }
-
-    public float AttackRange
-    {
-        get { return attackRange; }
-    }
-
     public bool IsAttacking
     {
         get { return isAttacking; }
         set { isAttacking = value; }
     }
 
-    public int ComboAttack
-    {
-        get { return comboAttack; }
-        set { comboAttack = value; }
-    }
-
-    public float ComboTimer
-    {
-        get { return comboTimer; }
-        set { comboTimer = value; }
-    }
-
-    public int AttackDamage
-    {
-        get { return attackDamage; }
-    }
-
     public Transform AttackPoint
     {
         get { return attackPoint; }
-    }
-
-    public float AttackStartTime
-    {
-        get { return attackStartTime; }
     }
     #endregion
 
