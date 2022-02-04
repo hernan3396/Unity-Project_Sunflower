@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
 
     private void Death()
     {
-        GetComponent<SpriteRenderer>().color = Color.black;
+        GetComponentInChildren<SpriteRenderer>().color = Color.black;
         this.gameObject.SetActive(false);
     }
 }

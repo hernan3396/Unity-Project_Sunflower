@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 320
   abilityName: Simple Attack
   cooldownTime: 0.2
   activeTime: 0

@@ -19,7 +19,7 @@ TagManager:
   - Mask
   - BehindMask
   - Black
-  - 
+  - Lights
   - Objects
   - 
   - 
@@ -48,12 +48,12 @@ TagManager:
   - name: Background
     uniqueID: 1857260911
     locked: 0
-  - name: Entities
+  - name: Things
     uniqueID: 1149972229
     locked: 0
   - name: Mesh
     uniqueID: 3901292025
     locked: 0
-  - name: Black
+  - name: Decoration-Top
     uniqueID: 2330965083
     locked: 0
