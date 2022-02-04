@@ -1,9 +1,11 @@
 using UnityEngine;
 using Pathfinding;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
     #region Components
+    private SpriteRenderer spriteRenderer;
     private UIManager uIManager;
     private Animator animator;
     private Rigidbody2D rb;
@@ -14,6 +16,7 @@ public class Enemy : MonoBehaviour
     [Header("Parameters")]
     [SerializeField, Range(0, 9999)] private int health;
     [SerializeField, Range(0, 1000)] private float speed;
+    [Space]
     #endregion
 
     #region Pathfinding
@@ -24,14 +27,22 @@ public class Enemy : MonoBehaviour
     #endregion
 
     #region EnemyFinding
+    [Header("Enemy Finding")]
     [SerializeField] private Transform target;
+    [Space]
     #endregion
 
-
+    #region Damage
+    [Header("Damage")]
+    [SerializeField, Range(0, 2)] private float knockbackTime;
+    [SerializeField] private int knockbackForce;
+    private bool onDamage = false;
+    #endregion
     private void Start()
     {
         uIManager = GameManager.GetInstance.GetUIManager;
 
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
         seeker = GetComponent<Seeker>();
@@ -43,6 +54,8 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (onDamage) return;
+
         #region Pathfinding
         if (path == null) return;
 
@@ -83,15 +96,32 @@ public class Enemy : MonoBehaviour
     #region Damage
     public void TakeDamage(int value)
     {
+        if (onDamage) return;
         // move later to ui and use variables
         uIManager.DamageTxt(transform.position, value);
 
         health -= value;
 
+        StartCoroutine("Knockback");
+
         if (health <= 0)
         {
             Death();
         }
+    }
+
+    private IEnumerator Knockback()
+    {
+        onDamage = true;
+
+        rb.AddForce((transform.position - target.position).normalized * knockbackForce);
+        spriteRenderer.color = Color.red;
+
+        yield return new WaitForSeconds(knockbackTime);
+
+        spriteRenderer.color = Color.white;
+
+        onDamage = false;
     }
 
     private void Death()
