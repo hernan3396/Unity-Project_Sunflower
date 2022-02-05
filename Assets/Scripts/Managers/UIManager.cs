@@ -14,6 +14,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float damageTxtDur;
     #endregion
 
+    private void Start()
+    {
+        ComboNumber(0);
+    }
+
     #region Methods
     public void PlayerState(Player.State currentState)
     {

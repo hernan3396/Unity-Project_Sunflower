@@ -18,12 +18,16 @@ public class Ability : ScriptableObject
     [Header("Combo Intento")]
     [SerializeField] protected bool isCombo;
     [SerializeField] protected int comboLength;
+    protected bool finisherReady;
     protected int combo = 0;
     #endregion
 
     private void Start()
     {
+        // reset combo values
+        // it can be != 0 on start
         combo = 0;
+        finisherReady = false;
     }
 
     public virtual void Activate(Transform position)
@@ -37,6 +41,7 @@ public class Ability : ScriptableObject
         // es medio al pedo hacerlos para una linea sola
         // pero esta por si hay que agregar mas logica luego
         combo += 1;
+        if (isCombo) finisherReady = combo >= comboLength ? true : false;
     }
 
     public void ResetCombo()
@@ -44,11 +49,7 @@ public class Ability : ScriptableObject
         // es medio al pedo hacerlos para una linea sola
         // pero esta por si hay que agregar mas logica luego
         combo = 0;
-    }
-
-    public virtual bool Finisher()
-    {
-        return combo >= comboLength && isCombo ? true : false;
+        finisherReady = false;
     }
     #endregion
 
@@ -96,6 +97,11 @@ public class Ability : ScriptableObject
     public bool IsCombo
     {
         get { return isCombo; }
+    }
+
+    public bool FinisherReady
+    {
+        get { return finisherReady; }
     }
     #endregion
 }
