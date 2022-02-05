@@ -3,9 +3,9 @@ using UnityEngine.Events;
 
 public class OnTrigger : MonoBehaviour
 {
+    [SerializeField] private bool useMask = false;
     [SerializeField] private LayerMask layer;
     [SerializeField] private string objective;
-    [SerializeField] private bool useMask = false;
     public UnityEvent onEnter;
     public UnityEvent onExit;
 
