@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using TMPro;
 using DG.Tweening;
 [RequireComponent(typeof(Rigidbody2D))]
 
@@ -20,6 +19,11 @@ public class Player : MonoBehaviour
         Running,
         Attacking
     }
+    #endregion
+    #region HealthPoints
+    [Header("Health Points")]
+    [SerializeField, Range(1, 10)] private int health;
+    [Space]
     #endregion
     #region Movement
     [Header("Movement")]
@@ -40,6 +44,7 @@ public class Player : MonoBehaviour
     // pero creo que no es necesario
     [SerializeField, Range(0, 2)] private float meleeOff;
     [SerializeField] private Vector2 attackOff;
+    [SerializeField] private float comboFallOff;
     private bool isAttacking;
     [Space]
     #endregion
@@ -91,7 +96,7 @@ public class Player : MonoBehaviour
         }
 
         #region Attack
-        // region attack point
+        // attack point
         // if you take your hand out of the controller
         // attack point stays on place instead of going to
         // local (0,0)
@@ -195,6 +200,11 @@ public class Player : MonoBehaviour
     public Transform AttackPoint
     {
         get { return attackPoint; }
+    }
+
+    public float ComboFallOff
+    {
+        get { return comboFallOff; }
     }
     #endregion
 
