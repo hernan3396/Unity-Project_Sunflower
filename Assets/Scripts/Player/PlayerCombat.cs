@@ -7,6 +7,7 @@ public class PlayerCombat : MonoBehaviour
     private UIManager uIManager;
     private Player player;
     #endregion
+    Coroutine stopComboCor;
 
     #region Abilities
     enum AbilityName
@@ -30,9 +31,11 @@ public class PlayerCombat : MonoBehaviour
         // it works as a cooldown, it resets on StopAttack
         if (player.IsAttacking) return;
 
-        if (abilities[currentAbility].Finisher())
+        if (abilities[currentAbility].FinisherReady)
         {
-            abilities[currentAbility].ResetCombo();
+            ResetCombo();
+
+            // uses a "Finisher"
             currentAbility = (int)AbilityName.HeavyAttack;
         }
         else
@@ -48,14 +51,16 @@ public class PlayerCombat : MonoBehaviour
     private IEnumerator StartAttack()
     {
         player.IsAttacking = true;
+        // Stops combo s  fall off timer
+        if (stopComboCor != null) StopCoroutine(stopComboCor);
 
         yield return new WaitForSeconds(abilities[currentAbility].CastTime);
-
         abilities[currentAbility].Activate(player.AttackPoint);
 
         if (abilities[currentAbility].IsCombo)
         {
-            abilities[currentAbility].AddCombo();
+            AddToCombo();
+            stopComboCor = StartCoroutine(StopCombo());
         }
 
         StartCoroutine("StopAttack");
@@ -69,5 +74,30 @@ public class PlayerCombat : MonoBehaviour
     }
     #endregion
 
+    #region ComboLogic
+    private IEnumerator StopCombo()
+    {
+        // adds fall off to combos
+        yield return new WaitForSeconds(player.ComboFallOff);
+        ResetCombo();
+    }
+
+    private void AddToCombo()
+    {
+        abilities[currentAbility].AddCombo();
+        uIManager.ComboNumber(abilities[currentAbility].Combo);
+    }
+
+    private void ResetCombo()
+    {
+        abilities[currentAbility].ResetCombo();
+        uIManager.ComboNumber(abilities[currentAbility].Combo);
+    }
+    #endregion
+
     // TODO: Implementar Sistema de cooldown para las habilidades
+    // para hacer esto cada habilidad tiene que tener un monobehaviour
+    // en vez de ser un scriptableobject
+    // asi que si lo quiero hacer hay que hacer unos cuantos cambios
+    // de momento da igual
 }
