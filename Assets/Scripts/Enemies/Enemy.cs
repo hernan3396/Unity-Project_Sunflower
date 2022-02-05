@@ -1,5 +1,6 @@
 using UnityEngine;
 using Pathfinding;
+using DG.Tweening;
 using System.Collections;
 
 public class Enemy : MonoBehaviour
@@ -16,6 +17,7 @@ public class Enemy : MonoBehaviour
     [Header("Parameters")]
     [SerializeField, Range(0, 9999)] private int health;
     [SerializeField, Range(0, 1000)] private float speed;
+    [SerializeField, Range(0, 2)] private float deathDuration;
     [Space]
     #endregion
 
@@ -61,12 +63,14 @@ public class Enemy : MonoBehaviour
 
         if (currentWaypoint >= path.vectorPath.Count)
         {
-            reachedEndOfPath = true;
+            // reachedEndOfPath = true;
+            // esto se puede usar para agregar logica
+            // mas adelante
             return;
         }
         else
         {
-            reachedEndOfPath = false;
+            // reachedEndOfPath = false;
         }
 
         // movement to target
@@ -106,7 +110,7 @@ public class Enemy : MonoBehaviour
 
         if (health <= 0)
         {
-            Death();
+            StartCoroutine("StartDeath");
         }
     }
 
@@ -124,9 +128,17 @@ public class Enemy : MonoBehaviour
         onDamage = false;
     }
 
+    private IEnumerator StartDeath()
+    {
+        spriteRenderer.color = Color.red;
+        animator.Play("Enemy_Death");
+
+        yield return new WaitForSeconds(deathDuration);
+        Death();
+    }
+
     private void Death()
     {
-        GetComponentInChildren<SpriteRenderer>().color = Color.black;
         this.gameObject.SetActive(false);
     }
     #endregion
