@@ -27,6 +27,12 @@ public class PlayerState : MonoBehaviour
     // logic for managing states and animations
     private void ManageState()
     {
+        if (player.IsDamaged)
+        {
+            player.CurrentState = Player.State.Damaged;
+            return;
+        }
+
         if (player.IsAttacking)
         {
             player.CurrentState = Player.State.Attacking;
@@ -48,19 +54,27 @@ public class PlayerState : MonoBehaviour
         switch (player.CurrentState)
         {
             case Player.State.Walking:
+                animator.SetBool("isAttacking", false);
                 animator.SetBool("isMoving", true);
                 animator.SetFloat("hMovement", player.CurrentDirection.x);
                 animator.SetFloat("vMovement", player.CurrentDirection.y);
                 break;
             case Player.State.Running:
+                animator.SetBool("isAttacking", false);
                 animator.SetBool("isMoving", true);
                 animator.SetFloat("hMovement", player.CurrentDirection.x);
                 animator.SetFloat("vMovement", player.CurrentDirection.y);
                 break;
             case Player.State.Attacking:
+                animator.SetBool("isMoving", false);
                 animator.SetBool("isAttacking", true);
                 animator.SetFloat("hAtkDir", player.AttackPoint.localPosition.x);
                 animator.SetFloat("vAtkDir", player.AttackPoint.localPosition.y);
+                break;
+            case Player.State.Damaged:
+                animator.SetBool("isMoving", false);
+                animator.SetBool("isAttacking", false);
+                animator.Play("Player_Damage");
                 break;
             default:
                 animator.SetBool("isMoving", false);

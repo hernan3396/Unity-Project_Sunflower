@@ -28,6 +28,8 @@ public class PlayerCombat : MonoBehaviour
 
     private void OnSimpleAttack()
     {
+        if (player.CurrentState == Player.State.Damaged) return;
+
         // it works as a cooldown, it resets on StopAttack
         if (player.IsAttacking) return;
 

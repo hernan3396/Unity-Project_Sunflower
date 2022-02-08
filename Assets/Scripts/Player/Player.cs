@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 [RequireComponent(typeof(Rigidbody2D))]
@@ -17,12 +18,16 @@ public class Player : MonoBehaviour
         Idle,
         Walking,
         Running,
-        Attacking
+        Attacking,
+        Damaged
     }
     #endregion
     #region HealthPoints
     [Header("Health Points")]
     [SerializeField, Range(1, 10)] private int health;
+    [SerializeField, Range(0, 5)] private float damageDuration;
+    [SerializeField] private int knockbackForce;
+    private bool isDamaged;
     [Space]
     #endregion
     #region Movement
@@ -129,6 +134,46 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    #region Attack
+    public void TakeDamage(int value, Vector2 enemyPos)
+    {
+        if (isDamaged) return;
+
+        isDamaged = true;
+        health -= value;
+
+        rb.AddForce(((Vector2)transform.position - enemyPos).normalized * knockbackForce);
+
+        if (health <= 0)
+        {
+            Death();
+        }
+
+        StartCoroutine("DamageAnim");
+    }
+
+    private IEnumerator DamageAnim()
+    {
+        yield return new WaitForSeconds(damageDuration);
+        isDamaged = false;
+    }
+
+    private void Death()
+    {
+        StopAllCoroutines();
+        this.gameObject.SetActive(false);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            TakeDamage(other.gameObject.GetComponent<Enemy>().Damage,
+                        other.transform.position);
+        }
+    }
+    #endregion
+
     #region Shadow/Light
     // cant use generic ontrigger script cause
     // you need other's position
@@ -205,6 +250,11 @@ public class Player : MonoBehaviour
     public float ComboFallOff
     {
         get { return comboFallOff; }
+    }
+
+    public bool IsDamaged
+    {
+        get { return isDamaged; }
     }
     #endregion
 

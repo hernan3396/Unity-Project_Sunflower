@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     [SerializeField, Range(0, 9999)] private int health;
     [SerializeField, Range(0, 1000)] private float speed;
     [SerializeField, Range(0, 2)] private float deathDuration;
+    [SerializeField, Range(0, 10)] private int damage;
     [Space]
     #endregion
 
@@ -158,6 +159,13 @@ public class Enemy : MonoBehaviour
             path = p;
             currentWaypoint = 0;
         }
+    }
+    #endregion
+
+    #region Getter/Setter
+    public int Damage
+    {
+        get { return damage; }
     }
     #endregion
 }
