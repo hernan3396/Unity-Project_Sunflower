@@ -202,6 +202,31 @@ public class Player : MonoBehaviour
     }
     #endregion
 
+    #region Cutscenes
+    public void StartCutscene()
+    {
+        GetComponent<PlayerInput>().enabled = false;
+        GetComponent<PlayerMovement>().enabled = false;
+        GetComponent<PlayerCombat>().enabled = false;
+        GetComponent<PlayerState>().enabled = false;
+
+        currentDirection = Vector2.zero;
+        rb.velocity = Vector2.zero;
+        direction = Vector2.zero;
+    }
+
+    public void FinishCutscene()
+    {
+        GetComponent<PlayerInput>().enabled = true;
+        GetComponent<PlayerMovement>().enabled = true;
+        GetComponent<PlayerCombat>().enabled = true;
+        GetComponent<PlayerState>().enabled = true;
+
+        rb.velocity = Vector2.zero;
+        direction = Vector2.zero;
+    }
+    #endregion
+
     #region Getter/Setter
     public Rigidbody2D GetRb
     {
