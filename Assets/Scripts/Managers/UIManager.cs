@@ -5,13 +5,17 @@ using System.Collections;
 public class UIManager : MonoBehaviour
 {
     #region Components
+    [Header("Player status")]
     [SerializeField] private TMP_Text playerState;
     [SerializeField] private TMP_Text playerStatus;
     [SerializeField] private TMP_Text comboNumber;
     [Space]
-    [Header("Damage Text")]
+    [Header("Damage")]
     [SerializeField] private GameObject damageTxt;
     [SerializeField] private float damageTxtDur;
+    [Space]
+    [Header("Dialogues")]
+    [SerializeField] private TMP_Text dialogues;
     #endregion
 
     private void Start()
@@ -19,7 +23,7 @@ public class UIManager : MonoBehaviour
         ComboNumber(0);
     }
 
-    #region Methods
+    #region PlayerStatus
     public void PlayerState(Player.State currentState)
     {
         playerState.text = "State: " + currentState.ToString();
@@ -34,7 +38,9 @@ public class UIManager : MonoBehaviour
     {
         comboNumber.text = "Combo N: " + value;
     }
+    #endregion
 
+    #region Damage
     public void DamageTxt(Vector2 position, int value)
     {
         damageTxt.gameObject.SetActive(true);
@@ -49,6 +55,24 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(damageTxtDur);
         damageTxt.gameObject.SetActive(false);
+    }
+    #endregion
+
+    #region Dialogues
+    public void ShowDialogue()
+    {
+        dialogues.gameObject.SetActive(true);
+        dialogues.text = string.Empty;
+    }
+
+    public void HideDialogue()
+    {
+        dialogues.gameObject.SetActive(false);
+    }
+
+    public void UpdateDialogue(char value)
+    {
+        dialogues.text += value;
     }
     #endregion
 }
