@@ -15,7 +15,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float damageTxtDur;
     [Space]
     [Header("Dialogues")]
-    [SerializeField] private TMP_Text dialogues;
+    [SerializeField] private GameObject dialogueBackground;
+    [SerializeField] private TMP_Text dialogue;
+    [Space]
+    [Header("Floating Dialogues")]
+    [SerializeField] private GameObject floatingDialogueBackground;
+    [SerializeField] private TMP_Text floatingDialogue;
+    [SerializeField] private Vector2 floatingDialogueOff;
     #endregion
 
     private void Start()
@@ -61,18 +67,39 @@ public class UIManager : MonoBehaviour
     #region Dialogues
     public void ShowDialogue()
     {
-        dialogues.gameObject.SetActive(true);
-        dialogues.text = string.Empty;
+        dialogueBackground.SetActive(true);
+        dialogue.text = string.Empty;
     }
 
     public void HideDialogue()
     {
-        dialogues.gameObject.SetActive(false);
+        dialogueBackground.SetActive(false);
+        dialogue.text = string.Empty;
     }
 
     public void UpdateDialogue(char value)
     {
-        dialogues.text += value;
+        dialogue.text += value;
+    }
+    #endregion
+
+    #region FloatingDialogues
+    public void ShowFloatingDialogue(Vector2 objective)
+    {
+        floatingDialogueBackground.transform.position = objective + floatingDialogueOff;
+        floatingDialogueBackground.SetActive(true);
+        floatingDialogue.text = string.Empty;
+    }
+
+    public void HideFloatingDialogue()
+    {
+        floatingDialogueBackground.SetActive(false);
+        floatingDialogue.text = string.Empty;
+    }
+
+    public void UpdateFloatingDialogue(char value)
+    {
+        floatingDialogue.text += value;
     }
     #endregion
 }

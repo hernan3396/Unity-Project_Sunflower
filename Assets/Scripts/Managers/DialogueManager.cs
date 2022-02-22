@@ -29,6 +29,12 @@ public class DialogueManager : MonoBehaviour
     [SerializeField, Range(0, 5)] private float characterDelay;
     [SerializeField] private int dataColumn; // n of rows in csv
     private DialogueList myDialogueList = new DialogueList();
+    private int dialogueNum;
+    #endregion
+
+    #region FloatingDialogues
+    [SerializeField] private FloatingDialogueHolder[] floatingDialogueHolders;
+    private bool isFloating;
     #endregion
 
     // Esta esta solo para testing
@@ -39,9 +45,14 @@ public class DialogueManager : MonoBehaviour
         ReadCSV();
 
         uIManager = GameManager.GetInstance.GetUIManager;
+
+        foreach (FloatingDialogueHolder holder in floatingDialogueHolders)
+        {
+            holder.onShowDialogue += ShowFloatingDialogue;
+        }
     }
 
-    #region Dialogues
+    #region ReadingFile
     private void ReadCSV()
     {
         string[] data = textAssetData.text.Split(new string[] { ",", "\n" }, StringSplitOptions.None);
@@ -59,19 +70,42 @@ public class DialogueManager : MonoBehaviour
             myDialogueList.dialogues[i].dialogueEng = data[4 * (i + 1) + (int)Column.Ingles];
         }
     }
+    #endregion
 
-    public void ShowDialogue(int rowDialogue)
+    #region Dialogues
+    public void ShowDialogue(int dialogueNum)
     {
-        // rowDialogue = Dialogue value in csv
-        uIManager.ShowDialogue();
+        // dialogueNum = Dialogue value in csv
 
+        // initial dialogue config
+        uIManager.ShowDialogue();
+        this.dialogueNum = dialogueNum;
+        isFloating = false;
+
+        StartReading();
+    }
+
+    public void ShowFloatingDialogue(int dialogueNum, Vector2 position)
+    {
+        // dialogueNum = Dialogue value in csv
+
+        // initial dialogue config
+        uIManager.ShowFloatingDialogue(position);
+        this.dialogueNum = dialogueNum;
+        isFloating = true;
+
+        StartReading();
+    }
+
+    public void StartReading()
+    {
         switch (language)
         {
             case Language.Espanol:
-                StartCoroutine("ReadingDialogue", myDialogueList.dialogues[rowDialogue].dialogueEsp);
+                StartCoroutine("ReadingDialogue", myDialogueList.dialogues[dialogueNum].dialogueEsp);
                 break;
             case Language.Ingles:
-                StartCoroutine("ReadingDialogue", myDialogueList.dialogues[rowDialogue].dialogueEng);
+                StartCoroutine("ReadingDialogue", myDialogueList.dialogues[dialogueNum].dialogueEng);
                 break;
         }
     }
@@ -80,7 +114,14 @@ public class DialogueManager : MonoBehaviour
     {
         foreach (char character in dialogue)
         {
-            uIManager.UpdateDialogue(character);
+            if (!isFloating)
+            {
+                uIManager.UpdateDialogue(character);
+            }
+            else
+            {
+                uIManager.UpdateFloatingDialogue(character);
+            }
             yield return new WaitForSeconds(characterDelay);
         }
     }
@@ -88,9 +129,19 @@ public class DialogueManager : MonoBehaviour
     public void StopDialogue()
     {
         StopAllCoroutines();
-        uIManager.HideDialogue();
+
+        if (isFloating) uIManager.HideFloatingDialogue();
+        else uIManager.HideDialogue();
     }
     #endregion
+
+    private void OnDestroy()
+    {
+        foreach (FloatingDialogueHolder holder in floatingDialogueHolders)
+        {
+            holder.onShowDialogue -= ShowFloatingDialogue;
+        }
+    }
 
     #region Classes
     private class Dialogue
