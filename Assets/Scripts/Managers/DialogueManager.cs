@@ -112,16 +112,28 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator ReadingDialogue(string dialogue)
     {
-        foreach (char character in dialogue)
+        // no se uso el foreach porque necesitas saber
+        // cuando termina el dialogo
+        for (int i = 0; i < dialogue.Length; i++)
         {
             if (!isFloating)
             {
-                uIManager.UpdateDialogue(character);
+                uIManager.UpdateDialogue(dialogue[i]);
             }
             else
             {
-                uIManager.UpdateFloatingDialogue(character);
+                uIManager.UpdateFloatingDialogue(dialogue[i]);
             }
+
+            if (dialogue[i] == '.')
+            {
+                yield return new WaitForSeconds(characterDelay * 5);
+
+                if (i < dialogue.Length - 1)
+                    uIManager.ClearDialogue(isFloating);
+                // dialogue.Length - 1 es el punto final para que no se borre el texto
+            }
+
             yield return new WaitForSeconds(characterDelay);
         }
     }

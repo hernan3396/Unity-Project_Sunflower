@@ -74,12 +74,18 @@ public class UIManager : MonoBehaviour
     public void HideDialogue()
     {
         dialogueBackground.SetActive(false);
-        dialogue.text = string.Empty;
+        ClearDialogue(false);  // true = is floating, false = ui
     }
 
     public void UpdateDialogue(char value)
     {
         dialogue.text += value;
+    }
+
+    public void ClearDialogue(bool isFloating)
+    {
+        if (!isFloating) dialogue.text = string.Empty;
+        else floatingDialogue.text = string.Empty;
     }
     #endregion
 
@@ -94,7 +100,7 @@ public class UIManager : MonoBehaviour
     public void HideFloatingDialogue()
     {
         floatingDialogueBackground.SetActive(false);
-        floatingDialogue.text = string.Empty;
+        ClearDialogue(true); // true = is floating, false = ui
     }
 
     public void UpdateFloatingDialogue(char value)
