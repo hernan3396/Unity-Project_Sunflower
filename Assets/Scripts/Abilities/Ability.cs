@@ -2,15 +2,24 @@ using UnityEngine;
 
 public class Ability : ScriptableObject
 {
+    // en vez de hacerlo asi tendria una clase base llamada abilty
+    // y luego la separaria en cosas de melee y spells por ejemplo
+    // asi no pasan cosas de combo a spells, pero es una prueba asi que 👍
     #region AbilityParameters
     [Header("Ability Parameters")]
     [SerializeField] protected LayerMask layer;
     [SerializeField] protected string abilityName;
-    [SerializeField] protected float cooldownTime;
     [SerializeField] protected float activeTime;
     [SerializeField] protected float castTime;
     [SerializeField] protected int damage;
     [SerializeField] protected float radius;
+    [Space]
+    #endregion
+
+    #region Cooldown
+    [Header("Cooldown")]
+    [SerializeField] protected float currentCooldown = 0;
+    [SerializeField] protected float cooldownTime;
     [Space]
     #endregion
 
@@ -62,6 +71,12 @@ public class Ability : ScriptableObject
     public float CooldownTime
     {
         get { return cooldownTime; }
+    }
+
+    public float CurrentCooldown
+    {
+        get { return currentCooldown; }
+        set { currentCooldown = value; }
     }
 
     public float CastTime

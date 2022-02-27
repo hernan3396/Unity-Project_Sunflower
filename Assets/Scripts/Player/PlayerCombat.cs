@@ -16,6 +16,15 @@ public class PlayerCombat : MonoBehaviour
         HeavyAttack
     }
 
+    // spells part is simple and incomplete
+    // dont want to finish it atm
+    enum Spells
+    {
+        SimpleSpell,
+        OtherSpell
+    }
+    [SerializeField] private Spell[] spells;
+
     [SerializeField] private Ability[] abilities;
     private int currentAbility;
     #endregion
@@ -24,7 +33,31 @@ public class PlayerCombat : MonoBehaviour
     {
         player = GetComponent<Player>();
         uIManager = GameManager.GetInstance.GetUIManager;
+
+        foreach (Spell spell in spells)
+        {
+            spell.CurrentCooldown = 0;
+        }
     }
+
+    #region Spell
+    // lazy implementation, didnt want to finish it
+    // but its a solid base for a good system
+    private void OnSpell()
+    {
+        // this is a simple method just for testing
+        // change later but for this "project" is not necessary
+        spells[(int)Spells.SimpleSpell].Activate(player.AttackPoint);
+    }
+
+    private void OnOtherSpell()
+    {
+        // this is a simple method just for testing
+        // change later but for this "project" is not necessary
+        spells[(int)Spells.OtherSpell].Activate(player.AttackPoint);
+    }
+    #endregion
+
 
     private void OnSimpleAttack()
     {
