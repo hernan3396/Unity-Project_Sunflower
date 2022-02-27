@@ -112,6 +112,7 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator ReadingDialogue(string dialogue)
     {
+        dialogue = dialogue.TrimEnd(); // removes empty space after every row in csv
         // no se uso el foreach porque necesitas saber
         // cuando termina el dialogo
         for (int i = 0; i < dialogue.Length; i++)
@@ -133,6 +134,7 @@ public class DialogueManager : MonoBehaviour
                     uIManager.ClearDialogue(isFloating);
                 // dialogue.Length - 1 es el punto final para que no se borre el texto
             }
+            Debug.Log(dialogue[i]);
 
             yield return new WaitForSeconds(characterDelay);
         }
