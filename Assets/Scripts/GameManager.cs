@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
     #region Components
     private EnemiesManager enemiesManager;
     private UIManager uiManager;
+    private RoomTemplates roomTemplates;
     #endregion
     private static GameManager instance;
 
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
 
         // components down here
         enemiesManager = GetComponent<EnemiesManager>();
+        roomTemplates = GetComponent<RoomTemplates>();
         uiManager = GetComponent<UIManager>();
     }
 
@@ -43,6 +45,11 @@ public class GameManager : MonoBehaviour
     public EnemiesManager GetEnemiesManager
     {
         get { return enemiesManager; }
+    }
+
+    public RoomTemplates GetRoomTemplates
+    {
+        get { return roomTemplates; }
     }
 
     public UIManager GetUIManager
