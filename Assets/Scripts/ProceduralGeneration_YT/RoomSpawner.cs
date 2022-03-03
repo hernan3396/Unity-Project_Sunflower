@@ -32,18 +32,22 @@ public class RoomSpawner : MonoBehaviour
         switch (openSide)
         {
             case OpenSide.bottomDoor:
+                // if door is bottom, needs a room with a top door
                 rand = Random.Range(0, roomTemplates.TopRooms.Length);
                 Instantiate(roomTemplates.TopRooms[rand], transform.position, transform.rotation);
                 break;
             case OpenSide.topDoor:
+                // if door is top, needs a room with a bottom door
                 rand = Random.Range(0, roomTemplates.BottomRooms.Length);
                 Instantiate(roomTemplates.BottomRooms[rand], transform.position, transform.rotation);
                 break;
             case OpenSide.rightDoor:
+                // if door is right, needs a room with a left door
                 rand = Random.Range(0, roomTemplates.LeftRooms.Length);
                 Instantiate(roomTemplates.LeftRooms[rand], transform.position, transform.rotation);
                 break;
             case OpenSide.leftDoor:
+                // if door is left, needs a room with a right door
                 rand = Random.Range(0, roomTemplates.RightRooms.Length);
                 Instantiate(roomTemplates.RightRooms[rand], transform.position, transform.rotation);
                 break;
