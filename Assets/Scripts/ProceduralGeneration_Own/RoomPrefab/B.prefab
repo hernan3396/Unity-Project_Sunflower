@@ -337,6 +337,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6562367678028029917}
+  - component: {fileID: -5506225529882909227}
   m_Layer: 0
   m_Name: B
   m_TagString: Untagged
@@ -359,6 +360,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5506225529882909227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533169904186237739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb3bceff9b80e34ab0ed39a28211d71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorsAvalible: 01010101
+  openDoors: 00000000
+  testDoorOff:
+  - {x: 0, y: -10, z: 0}
 --- !u!1 &1945569880015125959
 GameObject:
   m_ObjectHideFlags: 0

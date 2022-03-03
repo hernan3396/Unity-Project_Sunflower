@@ -7,6 +7,9 @@ public class RoomTemplates : MonoBehaviour
     [SerializeField] private GameObject[] rightRooms;
     [SerializeField] private GameObject[] leftRooms;
 
+    // keep order as above lists
+    [SerializeField] private Vector3[] newRoomOff = new Vector3[4] { new Vector3(0, -10, 0), new Vector3(0, 10, 0), new Vector3(10, 0, 0), new Vector3(-10, 0, 0) };
+
     public GameObject[] BottomRooms
     {
         get { return bottomRooms; }
@@ -22,5 +25,10 @@ public class RoomTemplates : MonoBehaviour
     public GameObject[] LeftRooms
     {
         get { return leftRooms; }
+    }
+
+    public Vector3[] GetOffset
+    {
+        get { return newRoomOff; }
     }
 }
