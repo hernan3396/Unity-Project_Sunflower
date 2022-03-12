@@ -134,7 +134,6 @@ public class DialogueManager : MonoBehaviour
                     uIManager.ClearDialogue(isFloating);
                 // dialogue.Length - 1 es el punto final para que no se borre el texto
             }
-            Debug.Log(dialogue[i]);
 
             yield return new WaitForSeconds(characterDelay);
         }
